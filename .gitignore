@@ -1,6 +1,14 @@
+<<<<<<< HEAD
 # Ignore configuration files that may contain sensitive information.
 sites/*/settings*.php
 
 # Ignore paths that contain user-generated content.
 sites/*/files
 sites/*/private
+=======
+INSTALL.txt
+LICENSE.txt
+README.txt
+demos/
+extras/documentation
+>>>>>>> d61b815651f450c767fc04085564bae40b9d0d83
