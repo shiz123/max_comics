@@ -1,0 +1,5 @@
+name = comment face
+package = comment
+description =  use face icon to comment
+version = "7.x"
+core = "7.x"

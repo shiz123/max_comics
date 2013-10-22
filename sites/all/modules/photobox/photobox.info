@@ -1,0 +1,13 @@
+name = Photobox
+description = "Integrates Photobox image gallery plugin."
+core = 7.x
+package = "Fields"
+dependencies[] = image
+dependencies[] = jquery_update
+
+; Information added by drupal.org packaging script on 2013-05-25
+version = "7.x-1.x-dev"
+core = "7.x"
+project = "photobox"
+datestamp = "1369450015"
+

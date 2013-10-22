@@ -1,0 +1,106 @@
+<?php
+/**
+ * @file
+ * This module allow user add face into comment.
+ * @author hejinlong
+ * @mail   jinlonghe@yahoo.cn
+ * @site   www.drupaluser.org
+ * @date   12-25-2011
+ */
+
+/**
+ * Implements hook_help().
+ */
+function comment_face_help($path, $arg) {
+  switch ($path) {
+    case 'admin/help#comment_face':
+      $output = '<h3>' . t('About') . '</h3>';
+      $output .= '<dd>' . t('The comment face  module allows user add face into comment') . '</dd>';
+      return $output;
+  }
+}
+
+/**
+ * Repalce comment face
+ */
+function comment_face_replace($content, $replace = 'image') {
+
+
+  if (empty($content)) {
+    return FALSE;
+  }
+  $face_path =  drupal_get_path('module', 'comment_face') . '/images/';
+  $face_array = array(':rigid:', ':smail:', ':laugh:', ':wildlaugh:', ':titter:', ':angry:', ':crazy:', ':avenge:', ':weep:', ':confused:', ':dizz:', ':sweat:', ':tired:', ':shy:', ':rage:', ':glad:', ':lovelace:', ':cool:', ':horrible:', ':lol:', ':sleep:');
+  $face_img = array('<img src="' . $face_path . '/rigid.gif"/>', '<img src="' . $face_path . '/smail.gif"/>', '<img src="' . $face_path . '/laugh.gif"/>', '<img src="' . $face_path . '/wildlaugh.gif"/>', '<img src="' . $face_path . '/titter.gif"/>', '<img src="' . $face_path . '/angry.gif"/>', '<img src="' . $face_path . '/crazy.gif"/>', '<img src="' . $face_path . '/avenge.gif"/>', '<img src="' . $face_path . '/weep.gif"/>', '<img src="' . $face_path . '/confused.gif"/>', '<img src="' . $face_path . '/dizz.gif"/>', '<img src="' . $face_path . '/sweat.gif"/>', '<img src="' . $face_path . '/tired.gif"/>', '<img src="' . $face_path . '/shy.gif"/>', '<img src="' . $face_path . '/rage.gif"/>', '<img src="' . $face_path . '/glad.gif"/>', '<img src="' . $face_path . '/lovelace.gif"/>', '<img src="' . $face_path . '/cool.gif"/>', '<img src="' . $face_path . '/horrible.gif"/>', '<img src="' . $face_path . '/lol.gif"/>', '<img src="' . $face_path . '/sleep.gif"/>');
+  if ($replace == 'image') {
+        return str_replace($face_array, $face_img, $content);
+  }
+  else {
+        return str_replace($face_array, $replace, $content);
+  }
+}
+/**
+ * Implements hook_init().
+ */
+function comment_face_init() {
+    drupal_add_js(drupal_get_path('module', 'comment_face') . '/jquery.selection.js');
+    drupal_add_js(drupal_get_path('module', 'comment_face') . '/comment_face.js');
+}
+/**
+ * Alter comment form
+ */
+function comment_face_form_alter(&$form, &$form_state, $form_id) {
+  if (arg(0) == 'node' && arg(1)) {
+      $node = node_load(arg(1));
+  }
+  elseif (arg(0) == 'comment' && arg(1) == 'reply') {
+      $node = node_load(arg(2));
+  }
+  elseif (arg(0) == 'comment' && arg(2) == 'edit') {
+      $comment = comment_load(arg(1));
+      $node = node_load($comment->nid);
+  }
+  else {
+      $node = '';
+  }
+  if (!empty($node) && $form_id == 'comment_node_' . $node->type . '_form') {
+      $face_path = drupal_get_path('module', 'comment_face') . '/images/';
+      $items = '<img src="' . $face_path . 'rigid.gif" alt=":rigid:"> ';
+      $items .= '<img src="' . $face_path . 'smail.gif" alt=":smail:"> ';
+      $items .= '<img src="' . $face_path . 'laugh.gif" alt=":laugh:"> ';
+      $items .= '<img src="' . $face_path . 'wildlaugh.gif" alt=":wildlaugh:"> ';
+      $items .= '<img src="' . $face_path . 'titter.gif" alt=":titter:"> ';
+      $items .= '<img src="' . $face_path . 'angry.gif" alt=":angry:"> ';
+      $items .= '<img src="' . $face_path . 'crazy.gif" alt=":crazy:"> ';
+      $items .= '<img src="' . $face_path . 'avenge.gif" alt=":avenge:"> ';
+      $items .= '<img src="' . $face_path . 'weep.gif" alt=":weep:"> ';
+      $items .= '<img src="' . $face_path . 'confused.gif" alt=":confused:"> ';
+      $items .= '<img src="' . $face_path . 'dizz.gif" alt=":dizz:"> ';
+      $items .= '<img src="' . $face_path . 'sweat.gif" alt=":sweat:"> ';
+      $items .= '<img src="' . $face_path . 'tired.gif" alt=":tired:"> ';
+      $items .= '<img src="' . $face_path . 'shy.gif" alt=":shy:"> ';
+      $items .= '<img src="' . $face_path . 'rage.gif" alt=":rage:"> ';
+      $items .= '<img src="' . $face_path . 'glad.gif" alt=":glad:"> ';
+      $items .= '<img src="' . $face_path . 'lovelace.gif" alt=":lovelace:"> ';
+      $items .= '<img src="' . $face_path . 'cool.gif" alt=":cool:"> ';
+      $items .= '<img src="' . $face_path . 'horrible.gif" alt=":horrible:"> ';
+      $items .= '<img src="' . $face_path . 'lol.gif" alt=":lol:"> ';
+      $items .= '<img src="' . $face_path . 'sleep.gif" alt=":sleep:"> ';
+      $form['face'] = array(
+                            '#prefix' => '<div id="comment-face" style="display:none">',
+                            '#markup' => $items,
+                            '#weight' => 0,
+                            '#suffix' => '</div>',
+                        );
+      $form['pre'] = array(
+                            '#prefix' => '<div id="pre_text" style="display:none">',
+                            '#suffix' => '</div>',
+                        );
+      $form['end'] = array(
+                            '#prefix' => '<div id="end_text" style="display:none">',
+                            '#suffix' => '</div>',
+                        );
+      $form['comment_filter']['comment']['#weight'] = 10;
+      unset($form['comment_filter']['comment']['#title']);
+  }
+}
